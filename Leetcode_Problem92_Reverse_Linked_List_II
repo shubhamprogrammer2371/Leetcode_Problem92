@@ -1,0 +1,102 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* reverseBetween(struct ListNode* head, int left, int right){
+    if(left == right)
+        return head;
+    struct ListNode *left_ptr = head, *right_ptr = head , *temp_ptr;
+    while((--right) > 0)
+    {
+        if((--left) > 0)
+            left_ptr = left_ptr->next;
+        right_ptr = right_ptr->next;
+    }
+    temp_ptr = left_ptr->next;
+    while(left_ptr != right_ptr)
+    {
+        int temp = left_ptr->val;
+        left_ptr->val = right_ptr->val;
+        right_ptr->val = temp;
+        if(temp_ptr == right_ptr || left_ptr == temp_ptr)
+            break;
+        while(temp_ptr->next != right_ptr)
+            temp_ptr = temp_ptr->next;
+        right_ptr = temp_ptr;
+        left_ptr = left_ptr->next;
+        temp_ptr = left_ptr->next;
+    }
+    return head;
+}
+
+
+
+---------------------------------------------------------------------------------------------------
+
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* reverseBetween(struct ListNode* head, int left, int right){
+
+    struct ListNode *p = head,*k=head;
+    int i = 1,kk=0;
+    int a[100000];
+    while(p!=NULL){
+        if (i>=left && i<=right){
+            a[kk++]=p->val;
+        }
+        p=p->next;
+        i++;
+    }
+    i=1;
+    while(k!=NULL){
+        if (i>=left && i<=right){
+            k->val=a[--kk];
+        }
+        k=k->next;
+        i++;
+    }
+    return head;
+}
+
+
+---------------------------------------------------------------------------------------
+
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* reverseBetween(struct ListNode* head, int left, int right){
+    if(!head || !head->next)
+        return head;
+    struct ListNode *dummy = malloc(sizeof(struct ListNode));
+    dummy->next = head;
+    struct ListNode *prev = dummy;
+
+    for(int i = 0; i < left - 1; i++)    
+        prev = prev->next;
+    struct ListNode *curr = prev->next;
+
+    for(int i = 0; i < right - left; i++)
+    {
+        struct ListNode *forw = curr->next;
+        curr->next = forw->next;
+        forw->next = prev->next;
+        prev->next = forw;
+    }
+    return dummy->next;
+}
